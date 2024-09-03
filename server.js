@@ -13,6 +13,11 @@ try {
   console.log('No data file found, starting fresh.');
 }
 
+// Initialise empty data structure
+data.users = data.users || [];
+data.groups = data.groups || [];
+data.channels = data.channels || [];
+
 // Save data to JSON file
 const saveData = () => {
   fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
@@ -49,4 +54,38 @@ app.post('/login', (req, res) => {
     saveData();
     res.status(201).json({ message: 'User created', user: newUser });
   });
+
+  // Group Admin creates groups
+app.post('/groups', (req, res) => {
+    const { groupName, createdBy } = req.body;
+    const group = { groupName, createdBy, users: [], channels: [] };
+    data.groups.push(group);
+    saveData();
+    res.status(201).json({ message: 'Group created', group });
+  });
+  
+  // Adding users to groups
+  app.post('/groups/:groupName/users', (req, res) => {
+    const group = data.groups.find(g => g.groupName === req.params.groupName);
+    if (group) {
+      group.users.push(req.body.username);
+      saveData();
+      res.status(200).json({ message: 'User added to group' });
+    } else {
+      res.status(404).json({ message: 'Group not found' });
+    }
+  });
+  
+  // Removing users from groups
+  app.delete('/groups/:groupName/users/:username', (req, res) => {
+    const group = data.groups.find(g => g.groupName === req.params.groupName);
+    if (group) {
+      group.users = group.users.filter(user => user !== req.params.username);
+      saveData();
+      res.status(200).json({ message: 'User removed from group' });
+    } else {
+      res.status(404).json({ message: 'Group not found' });
+    }
+  });
+  
   
