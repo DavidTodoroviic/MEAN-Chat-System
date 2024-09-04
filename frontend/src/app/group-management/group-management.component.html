@@ -1,15 +1,19 @@
-<div>
-    <h2>Group Management</h2>
-  
+<div class="group-management-container">
+  <h2>Group Management</h2>
+  <form (ngSubmit)="createGroup()" #groupForm="ngForm">
     <div>
-      <input [(ngModel)]="newGroupName" placeholder="Enter group name" />
-      <button (click)="createGroup()">Create Group</button>
+      <label for="newGroupName">Group Name:</label>
+      <input id="newGroupName" [(ngModel)]="newGroupName" name="newGroupName" placeholder="Enter group name" required>
+      <div *ngIf="groupForm.submitted && !newGroupName" class="error">
+        Group name is required.
+      </div>
     </div>
-  
-    <div *ngFor="let group of groups">
-      <h3>{{ group.name }}</h3>
-      <button (click)="deleteGroup(group.id)">Delete Group</button>
-      <!-- Add more functionalities like managing channels here -->
-    </div>
-  </div>
-  
+    <button type="submit">Create Group</button>
+  </form>
+  <ul>
+    <li *ngFor="let group of groups">
+      {{ group.name }}
+      <button (click)="deleteGroup(group.id)">Delete</button>
+    </li>
+  </ul>
+</div>

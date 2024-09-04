@@ -8,7 +8,7 @@ import { Group } from '../models/group.model';
   styleUrls: ['./group-management.component.css']
 })
 export class GroupManagementComponent implements OnInit {
-  groups: Group[] = [];
+  groups: Group[] = []; // Define the groups property
   newGroupName: string = '';
 
   constructor(private groupService: GroupService) {}
@@ -38,4 +38,5 @@ export class GroupManagementComponent implements OnInit {
     });
   }
 }
+
 

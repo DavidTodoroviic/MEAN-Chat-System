@@ -1,7 +1,8 @@
 <nav>
-  <a routerLink="/login" *ngIf="!isLoggedIn()">Login</a>
-  <a routerLink="/logout" *ngIf="isLoggedIn()">Logout</a>
+  <ul>
+    <li><a routerLink="/login">Login</a></li>
+    <li><a routerLink="/logout">Logout</a></li>
+    <li><a routerLink="/groups">Group Management</a></li>
+  </ul>
 </nav>
-
 <router-outlet></router-outlet>
-
