@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { GroupManagementComponent } from './group-management.component';
 
 describe('GroupManagementComponent', () => {
@@ -8,10 +7,12 @@ describe('GroupManagementComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [GroupManagementComponent]
+      declarations: [ GroupManagementComponent ]
     })
     .compileComponents();
+  });
 
+  beforeEach(() => {
     fixture = TestBed.createComponent(GroupManagementComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
@@ -21,3 +22,4 @@ describe('GroupManagementComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+
