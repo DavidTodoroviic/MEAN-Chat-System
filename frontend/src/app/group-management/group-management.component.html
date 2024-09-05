@@ -1,10 +1,10 @@
 <div class="group-management-container">
   <h2>Group Management</h2>
-  <form (ngSubmit)="createGroup()" #groupForm="ngForm">
+  <form (ngSubmit)="addGroup()" #groupForm="ngForm">
     <div>
       <label for="newGroupName">Group Name:</label>
-      <input id="newGroupName" [(ngModel)]="newGroupName" name="newGroupName" placeholder="Enter group name" required>
-      <div *ngIf="groupForm.submitted && !newGroupName" class="error">
+      <input id="newGroupName" [(ngModel)]="groupName" name="newGroupName" placeholder="Enter group name" required>
+      <div *ngIf="groupForm.submitted && !groupName" class="error">
         Group name is required.
       </div>
     </div>

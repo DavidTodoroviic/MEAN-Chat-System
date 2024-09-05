@@ -1,1 +1,13 @@
-<p>chat works!</p>
+<div class="chat-window">
+    <div class="messages">
+      <div *ngFor="let message of messages">
+        <strong>{{ message.user }}:</strong> {{ message.text }} <small>({{ message.timestamp | date:'shortTime' }})</small>
+      </div>
+    </div>
+  
+    <div class="message-input">
+      <input [(ngModel)]="messageInput" placeholder="Type your message" />
+      <button (click)="sendMessage()">Send</button>
+    </div>
+  </div>
+  

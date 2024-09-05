@@ -1,42 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { GroupService } from '../services/group.service';
-import { Group } from '../models/group.model';
 
 @Component({
   selector: 'app-group-management',
   templateUrl: './group-management.component.html',
   styleUrls: ['./group-management.component.css']
 })
-export class GroupManagementComponent implements OnInit {
-  groups: Group[] = []; // Define the groups property
-  newGroupName: string = '';
+export class GroupManagementComponent {
+  groupName: string = '';
+  channelName: string = '';
+  groups: any[] = [];
 
-  constructor(private groupService: GroupService) {}
-
-  ngOnInit(): void {
-    this.loadGroups();
+  constructor(private groupService: GroupService) {
+    this.groups = this.groupService.getGroups();
   }
 
-  loadGroups() {
-    this.groupService.getGroups().subscribe(groups => {
-      this.groups = groups;
-    });
+  addGroup() {
+    if (this.groupName.trim()) {
+      this.groupService.addGroup(this.groupName);
+      this.groupName = '';
+      this.groups = this.groupService.getGroups(); // Refresh the group list
+    }
   }
 
-  createGroup() {
-    if (this.newGroupName) {
-      this.groupService.createGroup(this.newGroupName).subscribe(group => {
-        this.groups.push(group);
-        this.newGroupName = '';
-      });
+  addChannel(groupId: string) {
+    if (this.channelName.trim()) {
+      this.groupService.addChannel(groupId, this.channelName);
+      this.channelName = '';
+      this.groups = this.groupService.getGroups(); // Refresh the group list
     }
   }
 
   deleteGroup(groupId: string) {
-    this.groupService.deleteGroup(groupId).subscribe(() => {
-      this.groups = this.groups.filter(group => group.id !== groupId);
-    });
+    this.groupService.deleteGroup(groupId);
+    this.groups = this.groupService.getGroups(); // Refresh the group list
   }
 }
+
 
 
