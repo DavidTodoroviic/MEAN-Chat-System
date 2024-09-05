@@ -30,62 +30,98 @@ app.listen(PORT, () => {
 
 // User Authentication
 app.post('/login', (req, res) => {
-    const { username, password } = req.body;
-    const user = data.users.find(user => user.username === username && user.password === password);
-    if (user) {
-      res.status(200).json({ message: 'Login successful', user });
-    } else {
-      res.status(401).json({ message: 'Invalid username or password' });
-    }
-  });
-  
-  app.post('/logout', (req, res) => {
-    res.status(200).json({ message: 'Logout successful' });
-  });
-  
-  // Super Admin can create users
-  app.post('/users', (req, res) => {
-    const { username, email, password } = req.body;
-    if (data.users.find(user => user.username === username)) {
-      return res.status(400).json({ message: 'Username already exists' });
-    }
-    const newUser = { username, email, password, role: 'user' };
-    data.users.push(newUser);
-    saveData();
-    res.status(201).json({ message: 'User created', user: newUser });
-  });
+  const { username, password } = req.body;
+  const user = data.users.find(user => user.username === username && user.password === password);
+  if (user) {
+    res.status(200).json({ message: 'Login successful', user });
+  } else {
+    res.status(401).json({ message: 'Invalid username or password' });
+  }
+});
 
-  // Group Admin creates groups
+// Create a new user
+app.post('/users', (req, res) => {
+  const { username, email, password } = req.body;
+  if (data.users.find(user => user.username === username)) {
+    return res.status(400).json({ message: 'Username already exists' });
+  }
+  const newUser = { id: Date.now().toString(), username, email, password, roles: ['User'], groups: [] };
+  data.users.push(newUser);
+  saveData();
+  res.status(201).json(newUser);
+});
+
+// Get all users
+app.get('/users', (req, res) => {
+  res.json(data.users);
+});
+
+// Create a new group
 app.post('/groups', (req, res) => {
-    const { groupName, createdBy } = req.body;
-    const group = { groupName, createdBy, users: [], channels: [] };
-    data.groups.push(group);
+  const { name, adminId } = req.body;
+  const admin = data.users.find(user => user.id === adminId);
+  if (!admin) {
+    return res.status(400).json({ message: 'Admin not found' });
+  }
+  const newGroup = { id: Date.now().toString(), name, admin: adminId, members: [adminId], channels: [] };
+  data.groups.push(newGroup);
+  admin.groups.push(newGroup.id);
+  saveData();
+  res.status(201).json(newGroup);
+});
+
+// Get all groups
+app.get('/groups', (req, res) => {
+  res.json(data.groups);
+});
+
+// Create a new channel
+app.post('/channels', (req, res) => {
+  const { name, groupId } = req.body;
+  const group = data.groups.find(group => group.id === groupId);
+  if (!group) {
+    return res.status(400).json({ message: 'Group not found' });
+  }
+  const newChannel = { id: Date.now().toString(), name, group: groupId };
+  data.channels.push(newChannel);
+  group.channels.push(newChannel.id);
+  saveData();
+  res.status(201).json(newChannel);
+});
+
+// Get all channels
+app.get('/channels', (req, res) => {
+  res.json(data.channels);
+});
+
+// Middleware for role-based access control
+const checkRole = (roles) => (req, res, next) => {
+  const { userId } = req.body;
+  const user = data.users.find(user => user.id === userId);
+  if (!user || !roles.some(role => user.roles.includes(role))) {
+    return res.status(403).json({ message: 'Access denied' });
+  }
+  next();
+};
+
+// Promote a user to Group Admin
+app.post('/promote', checkRole(['Super Admin']), (req, res) => {
+  const { userId } = req.body;
+  const user = data.users.find(user => user.id === userId);
+  if (user) {
+    user.roles.push('Group Admin');
     saveData();
-    res.status(201).json({ message: 'Group created', group });
-  });
-  
-  // Adding users to groups
-  app.post('/groups/:groupName/users', (req, res) => {
-    const group = data.groups.find(g => g.groupName === req.params.groupName);
-    if (group) {
-      group.users.push(req.body.username);
-      saveData();
-      res.status(200).json({ message: 'User added to group' });
-    } else {
-      res.status(404).json({ message: 'Group not found' });
-    }
-  });
-  
-  // Removing users from groups
-  app.delete('/groups/:groupName/users/:username', (req, res) => {
-    const group = data.groups.find(g => g.groupName === req.params.groupName);
-    if (group) {
-      group.users = group.users.filter(user => user !== req.params.username);
-      saveData();
-      res.status(200).json({ message: 'User removed from group' });
-    } else {
-      res.status(404).json({ message: 'Group not found' });
-    }
-  });
-  
+    res.status(200).json({ message: 'User promoted to Group Admin', user });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+});
+
+// Remove a user
+app.delete('/users/:id', checkRole(['Super Admin']), (req, res) => {
+  const userId = req.params.id;
+  data.users = data.users.filter(user => user.id !== userId);
+  saveData();
+  res.status(200).json({ message: 'User removed' });
+});
   
