@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { AppRoutingModule } from './app-routing.module'
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
@@ -8,14 +9,7 @@ import { GroupManagementComponent } from './group-management/group-management.co
 import { ChatComponent } from './chat/chat.component';
 import { AuthService } from './services/auth.service';
 import { GroupService } from './services/group.service';
-import { RouterModule, Routes } from '@angular/router';
 
-const appRoutes: Routes = [
-  { path: '', component: LoginComponent },
-  { path: 'group-management', component: GroupManagementComponent },
-  { path: 'chat', component: ChatComponent },
-  { path: 'logout', component: LogoutComponent }
-];
 
 @NgModule({
   declarations: [
@@ -28,7 +22,8 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     FormsModule,
-    RouterModule.forRoot(appRoutes)
+    
+    AppRoutingModule 
   ],
   providers: [AuthService, GroupService],
   bootstrap: [AppComponent]

@@ -4,10 +4,10 @@
     <li *ngIf="isLoggedIn()"><a routerLink="/logout">Logout</a></li>
 
     <!-- Super Admin can access Group Management -->
-    <li *ngIf="isAdmin()"><a routerLink="/groups">Group Management</a></li>
+    <li *ngIf="isSuperAdmin() || isAdmin()"><a routerLink="/groups">Group Management</a></li>
     
     <!-- Users can access Chat -->
-    <li *ngIf="isUser()"><a routerLink="/chat">Chat</a></li>
+    <li *ngIf="isUser() || isSuperAdmin() || isAdmin()"><a routerLink="/chat">Chat</a></li>
   </ul>
 </nav>
 

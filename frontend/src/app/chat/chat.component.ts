@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../services/auth.service'; // Import AuthService
 
 @Component({
   selector: 'app-chat',
@@ -8,11 +9,12 @@ import { Component, OnInit } from '@angular/core';
 export class ChatComponent implements OnInit {
   messages: { user: string, text: string, timestamp: Date }[] = [];
   messageInput: string = '';
-  currentUser: string = 'User1';  // Replace this with the actual logged-in user
+  currentUser: string = '';  // Initialize as an empty string
 
-  constructor() { }
+  constructor(private authService: AuthService) { } // Inject AuthService
 
   ngOnInit(): void {
+    this.currentUser = this.authService.getCurrentUser().username; // Set currentUser based on logged-in user
     this.loadMessages();
   }
 
