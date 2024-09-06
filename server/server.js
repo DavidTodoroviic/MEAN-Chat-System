@@ -1,9 +1,16 @@
 const express = require('express');
 const fs = require('fs');
+const cors = require('cors'); // Add CORS
 const app = express();
+const http = require('http');  // Required for Socket.io
+const server = http.createServer(app);
+const { Server } = require('socket.io');
+const io = new Server(server); // Initialize Socket.io
 const PORT = process.env.PORT || 3000;
 
+// Middleware
 app.use(express.json());
+app.use(cors());  // Enable CORS
 
 // Load data from JSON file
 let data = {};
@@ -24,8 +31,22 @@ const saveData = () => {
 };
 
 // Start the server
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+});
+
+// Socket.io events for real-time communication
+io.on('connection', (socket) => {
+  console.log('New client connected');
+
+  socket.on('message', (message) => {
+    console.log('Message received:', message);
+    io.emit('message', message);  // Broadcast message to all clients
+  });
+
+  socket.on('disconnect', () => {
+    console.log('Client disconnected');
+  });
 });
 
 // User Authentication
@@ -124,4 +145,3 @@ app.delete('/users/:id', checkRole(['Super Admin']), (req, res) => {
   saveData();
   res.status(200).json({ message: 'User removed' });
 });
-  
