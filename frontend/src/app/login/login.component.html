@@ -15,6 +15,7 @@
         Password is required.
       </div>
     </div>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
     <button type="submit">Login</button>
   </form>
 </div>

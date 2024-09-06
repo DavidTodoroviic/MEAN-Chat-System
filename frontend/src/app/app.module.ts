@@ -6,7 +6,7 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { GroupManagementComponent } from './group-management/group-management.component';
 import { ChatComponent } from './chat/chat.component';
-import { AuthService } from './auth.service';
+import { AuthService } from './services/auth.service';
 import { GroupService } from './services/group.service';
 import { RouterModule, Routes } from '@angular/router';
 

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -15,18 +15,19 @@ export class LoginComponent {
   constructor(private authService: AuthService, private router: Router) {}
 
   login() {
-    if (this.authService.login(this.username, this.password)) {
-      const role = this.authService.getRole();
-      if (role === 'Super Admin') {
-        this.router.navigate(['/super-admin-dashboard']);
-      } else if (role === 'Group Admin') {
+    this.authService.login(this.username, this.password).subscribe(user => {
+      if (user.roles.includes('Super Admin')) {
+        this.router.navigate(['/admin-dashboard']);
+      } else if (user.roles.includes('Group Admin')) {
         this.router.navigate(['/group-management']);
-      } else {
+      } else if (user.roles.includes('User')) {
         this.router.navigate(['/chat']);
+      } else {
+        this.errorMessage = 'Invalid role';
       }
-    } else {
+    }, error => {
       this.errorMessage = 'Invalid username or password';
-    }
+    });
   }
 }
 

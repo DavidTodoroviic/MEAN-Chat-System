@@ -8,7 +8,7 @@ import { Component, OnInit } from '@angular/core';
 export class ChatComponent implements OnInit {
   messages: { user: string, text: string, timestamp: Date }[] = [];
   messageInput: string = '';
-  currentUser: string = 'User1';  // You can replace this with the actual logged-in user
+  currentUser: string = 'User1';  // Replace this with the actual logged-in user
 
   constructor() { }
 

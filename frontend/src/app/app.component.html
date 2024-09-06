@@ -1,8 +1,9 @@
 <nav>
   <ul>
-    <li><a routerLink="/login">Login</a></li>
-    <li><a routerLink="/logout">Logout</a></li>
-    <li><a routerLink="/groups">Group Management</a></li>
+    <li *ngIf="!isLoggedIn()"><a routerLink="/login">Login</a></li>
+    <li *ngIf="isLoggedIn()"><a routerLink="/logout">Logout</a></li>
+    <li *ngIf="isAdmin()"><a routerLink="/groups">Group Management</a></li>
+    <li *ngIf="isUser()"><a routerLink="/chat">Chat</a></li>
   </ul>
 </nav>
 <router-outlet></router-outlet>
