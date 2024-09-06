@@ -1,19 +1,24 @@
-<div class="group-management-container">
-  <h2>Group Management</h2>
-  <form (ngSubmit)="addGroup()" #groupForm="ngForm">
+<h2>Group Management</h2>
+
+<!-- Form to create a new group -->
+<form (ngSubmit)="addGroup()">
+  <label>Group Name:</label>
+  <input type="text" [(ngModel)]="groupName" name="newGroupName" required>
+  <button type="submit">Create Group</button>
+</form>
+
+<!-- List of existing groups -->
+<ul>
+  <li *ngFor="let group of groups">
+    {{ group.name }}
+    <button (click)="deleteGroup(group.id)">Delete</button>
+
+    <!-- Manage users in the group -->
     <div>
-      <label for="newGroupName">Group Name:</label>
-      <input id="newGroupName" [(ngModel)]="groupName" name="newGroupName" placeholder="Enter group name" required>
-      <div *ngIf="groupForm.submitted && !groupName" class="error">
-        Group name is required.
-      </div>
+      <h4>Users in Group:</h4>
+      <ul>
+        <li *ngFor="let user of group.users">{{ user.username }}</li>
+      </ul>
     </div>
-    <button type="submit">Create Group</button>
-  </form>
-  <ul>
-    <li *ngFor="let group of groups">
-      {{ group.name }}
-      <button (click)="deleteGroup(group.id)">Delete</button>
-    </li>
-  </ul>
-</div>
+  </li>
+</ul>

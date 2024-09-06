@@ -7,15 +7,20 @@ import { AuthService } from './services/auth.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  constructor(private authService: AuthService) {}
   title = 'frontend';
-  
+
+  constructor(private authService: AuthService) {}
+
   isLoggedIn() {
     return this.authService.isAuthenticated();
   }
 
   isAdmin() {
-    return this.authService.hasRole('Super Admin') || this.authService.hasRole('Group Admin');
+    return this.authService.hasRole('Group Admin');
+  }
+
+  isSuperAdmin() {
+    return this.authService.hasRole('Super Admin');
   }
 
   isUser() {

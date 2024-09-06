@@ -2,8 +2,13 @@
   <ul>
     <li *ngIf="!isLoggedIn()"><a routerLink="/login">Login</a></li>
     <li *ngIf="isLoggedIn()"><a routerLink="/logout">Logout</a></li>
+
+    <!-- Super Admin can access Group Management -->
     <li *ngIf="isAdmin()"><a routerLink="/groups">Group Management</a></li>
+    
+    <!-- Users can access Chat -->
     <li *ngIf="isUser()"><a routerLink="/chat">Chat</a></li>
   </ul>
 </nav>
+
 <router-outlet></router-outlet>

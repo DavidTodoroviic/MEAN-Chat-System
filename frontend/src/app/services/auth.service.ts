@@ -27,6 +27,10 @@ export class AuthService {
     }
   }
 
+  logout() {
+    this.currentUser = null;
+  }
+
   isAuthenticated(): boolean {
     return this.currentUser !== null;
   }
@@ -35,8 +39,8 @@ export class AuthService {
     return this.currentUser && this.currentUser.roles.includes(role);
   }
 
-  logout() {
-    this.currentUser = null;
+  getCurrentUser() {
+    return this.currentUser;
   }
 }
 
