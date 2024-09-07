@@ -1,0 +1,22 @@
+<h2>Create a New User</h2>
+<form (ngSubmit)="createUser()">
+  <label>Username:</label>
+  <input [(ngModel)]="newUser.username" name="username" required>
+
+  <label>Email:</label>
+  <input [(ngModel)]="newUser.email" name="email" required>
+
+  <label>Password:</label>
+  <input [(ngModel)]="newUser.password" name="password" type="password" required>
+
+  <label>Role:</label>
+  <select [(ngModel)]="newUser.roles[0]" name="role">
+    <option value="User">User</option>
+    <option value="Group Admin">Group Admin</option>
+  </select>
+
+  <label>Groups:</label>
+  <input [(ngModel)]="newUser.groups" name="groups" required>
+
+  <button type="submit">Create User</button>
+</form>

@@ -5,6 +5,7 @@ describe('User Model', () => {
     const user: User = {
       id: '1',
       username: 'testuser',
+      password: '123',
       email: 'test@example.com',
       roles: ['user'],
       groups: ['group1']

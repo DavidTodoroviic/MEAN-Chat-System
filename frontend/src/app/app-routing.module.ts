@@ -6,9 +6,13 @@ import { GroupManagementComponent } from './group-management/group-management.co
 import { ChatComponent } from './chat/chat.component';
 import { AdminGuard } from '../guards/admin.guard';  
 import { AuthGuard } from '../guards/auth.guard';
+import { SuperAdminComponent } from './super-admin/super-admin.component';
+import { ChannelSelectionComponent } from './channel-selection/channel-selection.component';  // Corrected import statement
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'super-admin', component: SuperAdminComponent, canActivate: [AdminGuard] },
+  { path: 'channel-selection', component: ChannelSelectionComponent, canActivate: [AuthGuard] },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'groups', component: GroupManagementComponent, canActivate: [AdminGuard] },  // Protect route with AdminGuard

@@ -17,7 +17,7 @@ export class LoginComponent {
   login() {
     this.authService.login(this.username, this.password).subscribe(user => {
       if (user.roles.includes('Super Admin')) {
-        this.router.navigate(['/groups']);
+        this.router.navigate(['/users']);
       } else if (user.roles.includes('Group Admin')) {
         this.router.navigate(['/groups']);
       } else if (user.roles.includes('User')) {
