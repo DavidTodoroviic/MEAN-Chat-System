@@ -4,7 +4,7 @@
     <li *ngIf="isLoggedIn()"><a routerLink="/logout">Logout</a></li>
 
     <!-- Super Admin can access Group Management -->
-    <li *ngIf="isSuperAdmin()"><a routerLink="/groups">Group Management</a></li>
+    <li *ngIf="isSuperAdmin() || isAdmin()"><a routerLink="/groups">Group Management</a></li>
     
     <!-- Super Admin can access Super Admin Panel -->
     <li *ngIf="isSuperAdmin()"><a routerLink="/super-admin">Super Admin Panel</a></li>
