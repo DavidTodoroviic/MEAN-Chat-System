@@ -1,24 +1,37 @@
-<h2>Group Management</h2>
+<h2>Manage Groups</h2>
 
-<!-- Form to create a new group -->
-<form (ngSubmit)="addGroup()">
-  <label>Group Name:</label>
-  <input type="text" [(ngModel)]="groupName" name="newGroupName" required>
-  <button type="submit">Create Group</button>
-</form>
+<div>
+  <label>New Group Name:</label>
+  <input [(ngModel)]="groupName" placeholder="Enter group name">
+  <button (click)="addGroup()">Add Group</button>
+</div>
 
-<!-- List of existing groups -->
 <ul>
   <li *ngFor="let group of groups">
-    {{ group.name }}
-    <button (click)="deleteGroup(group.id)">Delete</button>
+    <h3>{{ group.name }}</h3>
 
-    <!-- Manage users in the group -->
     <div>
-      <h4>Users in Group:</h4>
-      <ul>
-        <li *ngFor="let user of group.users">{{ user.username }}</li>
-      </ul>
+      <label>New Channel Name:</label>
+      <input [(ngModel)]="channelName" placeholder="Enter channel name">
+      <button (click)="addChannel(group.id)">Add Channel</button>
     </div>
+
+    <h4>Channels</h4>
+    <ul>
+      <li *ngFor="let channel of group.channels">
+        {{ channel.name }}
+      </li>
+    </ul>
+
+    <div>
+      <label>Select User to Add:</label>
+      <select [(ngModel)]="selectedUserId">
+        <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
+      </select>
+      <button (click)="addUserToGroup(group.id)">Add User to Group</button>
+    </div>
+
+    <button (click)="deleteGroup(group.id)">Delete Group</button>
   </li>
 </ul>
+

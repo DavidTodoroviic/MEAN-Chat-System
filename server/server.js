@@ -1,10 +1,10 @@
 const express = require('express');
 const fs = require('fs');
-const cors = require('cors'); // Enable CORS
+const cors = require('cors');
 const app = express();
-const http = require('http');  // Required for Socket.io
+const http = require('http');
 const server = http.createServer(app);
-const sockets = require('./sockets');  // Import sockets module
+const sockets = require('./sockets');
 
 // Initialize Socket.io
 sockets.init(server);
@@ -34,8 +34,9 @@ const saveData = () => {
 };
 
 // User Authentication
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
+  
   const user = data.users.find(user => user.username === username && user.password === password);
   if (user) {
     res.status(200).json({ message: 'Login successful', user });
@@ -45,87 +46,155 @@ app.post('/login', (req, res) => {
 });
 
 // Create a new user
-app.post('/users', (req, res) => {
-  const { username, email, password } = req.body;
+app.post('/api/users', (req, res) => {
+  const { username, email, password, roles, groups } = req.body;
+
   if (data.users.find(user => user.username === username)) {
     return res.status(400).json({ message: 'Username already exists' });
   }
-  const newUser = { id: Date.now().toString(), username, email, password, roles: ['User'], groups: [] };
+
+  const newUser = { id: Date.now().toString(), username, email, password, roles, groups };
+  console.table(newUser)
   data.users.push(newUser);
   saveData();
   res.status(201).json(newUser);
 });
 
 // Get all users
-app.get('/users', (req, res) => {
+app.get('/api/users', (req, res) => {
   res.json(data.users);
 });
 
 // Create a new group
-app.post('/groups', (req, res) => {
+app.post('/api/groups', (req, res) => {
   const { name, adminId } = req.body;
+
   const admin = data.users.find(user => user.id === adminId);
   if (!admin) {
     return res.status(400).json({ message: 'Admin not found' });
   }
+
   const newGroup = { id: Date.now().toString(), name, admin: adminId, members: [adminId], channels: [] };
   data.groups.push(newGroup);
   admin.groups.push(newGroup.id);
+  // console.table(newGroup)
   saveData();
   res.status(201).json(newGroup);
 });
 
-// Get all groups
-app.get('/groups', (req, res) => {
-  res.json(data.groups);
+// Add user to group
+app.post('/api/groups/:groupId/users', (req, res) => {
+  const { groupId } = req.params;
+  const { userId } = req.body;
+
+  const group = data.groups.find(group => group.id === groupId);
+  const user = data.users.find(user => user.id === userId);
+
+  if (!group || !user) {
+    return res.status(404).json({ message: 'Group or User not found' });
+  }
+
+  if (!group.members.includes(userId)) {
+    group.members.push(userId);
+    user.groups.push(groupId);
+    saveData();
+    res.status(200).json({ message: 'User added to group' });
+  } else {
+    res.status(400).json({ message: 'User is already in the group' });
+  }
 });
 
 // Create a new channel
-app.post('/channels', (req, res) => {
+app.post('/api/channels', (req, res) => {
   const { name, groupId } = req.body;
+
   const group = data.groups.find(group => group.id === groupId);
   if (!group) {
     return res.status(400).json({ message: 'Group not found' });
   }
-  const newChannel = { id: Date.now().toString(), name, group: groupId };
+
+  const newChannel = { id: Date.now().toString(), name, group: groupId, users: [] };
   data.channels.push(newChannel);
   group.channels.push(newChannel.id);
   saveData();
   res.status(201).json(newChannel);
 });
 
+// Add user to channel
+app.post('/api/channels/:channelId/users', (req, res) => {
+  const { channelId } = req.params;
+  const { userId } = req.body;
+
+  const channel = data.channels.find(channel => channel.id === channelId);
+  const user = data.users.find(user => user.id === userId);
+
+  if (!channel || !user) {
+    return res.status(404).json({ message: 'Channel or User not found' });
+  }
+
+  if (!channel.users.includes(userId)) {
+    channel.users.push(userId);
+    saveData();
+    res.status(200).json({ message: 'User added to channel' });
+  } else {
+    res.status(400).json({ message: 'User is already in the channel' });
+  }
+});
+
+// Get all groups
+app.get('/api/groups', (req, res) => {
+  res.json(data.groups);
+});
+
 // Get all channels
-app.get('/channels', (req, res) => {
+app.get('/api/channels', (req, res) => {
   res.json(data.channels);
 });
 
 // Middleware for role-based access control
-const checkRole = (roles) => (req, res, next) => {
+const checkRole = roles => (req, res, next) => {
   const { userId } = req.body;
+  
   const user = data.users.find(user => user.id === userId);
-  if (!user || !roles.some(role => user.roles.includes(role))) {
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  if (!roles.some(role => user.roles.includes(role))) {
     return res.status(403).json({ message: 'Access denied' });
   }
+
   next();
 };
 
 // Promote a user to Group Admin
-app.post('/promote', checkRole(['Super Admin']), (req, res) => {
+app.post('/api/promote', checkRole(['Super Admin']), (req, res) => {
   const { userId } = req.body;
+  
   const user = data.users.find(user => user.id === userId);
-  if (user) {
+  if (!user) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  if (!user.roles.includes('Group Admin')) {
     user.roles.push('Group Admin');
     saveData();
     res.status(200).json({ message: 'User promoted to Group Admin', user });
   } else {
-    res.status(404).json({ message: 'User not found' });
+    res.status(400).json({ message: 'User is already a Group Admin' });
   }
 });
 
 // Remove a user
-app.delete('/users/:id', checkRole(['Super Admin']), (req, res) => {
+app.delete('/api/users/:id', checkRole(['Super Admin']), (req, res) => {
   const userId = req.params.id;
-  data.users = data.users.filter(user => user.id !== userId);
+  
+  const userIndex = data.users.findIndex(user => user.id === userId);
+  if (userIndex === -1) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+
+  data.users.splice(userIndex, 1);
   saveData();
   res.status(200).json({ message: 'User removed' });
 });

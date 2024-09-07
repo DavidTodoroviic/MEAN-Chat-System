@@ -5,11 +5,13 @@ describe('Channel Model', () => {
     const channel: Channel = {
       id: '1',
       name: 'General',
-      users: ['user1', 'user2']
+      users: ['user1', 'user2'],
+      groupId: '1' // Include groupId property
     };
 
     expect(channel.id).toBe('1');
     expect(channel.name).toBe('General');
     expect(channel.users.length).toBe(2);
+    expect(channel.groupId).toBe('1'); // Add assertion for groupId
   });
 });

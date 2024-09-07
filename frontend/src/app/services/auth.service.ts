@@ -42,5 +42,22 @@ export class AuthService {
   getCurrentUser() {
     return this.currentUser;
   }
+
+  // New methods
+  isLoggedIn(): boolean {
+    return this.isAuthenticated();
+  }
+
+  isSuperAdmin(): boolean {
+    return this.hasRole('Super Admin');
+  }
+
+  isUser(): boolean {
+    return this.hasRole('User');
+  }
+
+  isAdmin(): boolean {
+    return this.hasRole('Group Admin');
+  }
 }
 
