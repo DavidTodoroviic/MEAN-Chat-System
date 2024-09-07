@@ -9,8 +9,6 @@ import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './logout/logout.component';
 import { GroupManagementComponent } from './group-management/group-management.component';
 import { ChatComponent } from './chat/chat.component';
-import { AdminGuard } from '../guards/admin.guard';
-import { AuthGuard } from '../guards/auth.guard';
 import { ChannelSelectionComponent } from './channel-selection/channel-selection.component';
 
 @NgModule({
@@ -29,7 +27,6 @@ import { ChannelSelectionComponent } from './channel-selection/channel-selection
     FormsModule,
     HttpClientModule // Add HttpClientModule to imports array
   ],
-  providers: [AdminGuard, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
