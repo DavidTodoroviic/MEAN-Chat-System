@@ -36,7 +36,8 @@ const saveData = () => {
 // User Authentication
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  
+  console.log('Login request received')
+  console.table(req.body)
   const user = data.users.find(user => user.username === username && user.password === password);
   if (user) {
     res.status(200).json({ message: 'Login successful', user });

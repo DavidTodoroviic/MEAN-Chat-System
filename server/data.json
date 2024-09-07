@@ -11,74 +11,34 @@
       "groups": []
     },
     {
-      "id": "1725712124479",
-      "username": "test",
-      "email": "test@gmail.co",
+      "id": "1725711971486",
+      "username": "super",
+      "email": "super@example.com",
       "password": "123",
       "roles": [
-        "User"
+        "Super Admin"
       ],
       "groups": []
     },
     {
-      "id": "1725712567608",
-      "username": "test2",
-      "email": "test2@gmail.co",
-      "password": "123",
-      "roles": [
-        "User"
-      ],
-      "groups": []
-    },
-    {
-      "id": "1725713331265",
-      "username": "test4",
-      "email": "test4@mail.co",
-      "password": "123",
-      "roles": [],
-      "groups": []
-    },
-    {
-      "id": "1725713369024",
-      "username": "asdf",
-      "email": "asdf@mail.co",
-      "password": "123",
-      "roles": [],
-      "groups": []
-    },
-    {
-      "id": "1725713642751",
-      "username": "asdfasdf",
-      "email": "asdfasd@f!asdf.cop",
-      "password": "123",
-      "roles": [],
-      "groups": []
-    },
-    {
-      "id": "1725713690103",
-      "username": "",
-      "email": "",
-      "password": "",
-      "roles": [],
-      "groups": []
-    },
-    {
-      "id": "1725713979532",
-      "username": "sdhfgajsdk",
-      "email": "asjkdfhak@asdf.co",
-      "password": "123",
-      "roles": [],
-      "groups": []
-    },
-    {
-      "id": "1725714090199",
-      "username": "davo",
-      "email": "davo@da.co",
+      "id": "1725711971487",
+      "username": "admin",
+      "email": "admin@example.com",
       "password": "123",
       "roles": [
         "Group Admin"
       ],
-      "groups": "Group 1"
+      "groups": []
+    },
+    {
+      "id": "1725711971488",
+      "username": "user",
+      "email": "user@example.com",
+      "password": "123",
+      "roles": [
+        "User"
+      ],
+      "groups": []
     }
   ],
   "groups": [],
