@@ -16,6 +16,7 @@ export class LoginComponent {
 
   login() {
     this.authService.login(this.username, this.password).subscribe(user => {
+      if (user) {
       if (user.roles.includes('Super Admin')) {
         this.router.navigate(['/super-admin']);
       } else if (user.roles.includes('Group Admin')) {
@@ -24,6 +25,7 @@ export class LoginComponent {
         this.router.navigate(['/chat']);
       } else {
         this.errorMessage = 'Invalid role';
+      }
       }
     }, error => {
       this.errorMessage = 'Invalid username or password';
