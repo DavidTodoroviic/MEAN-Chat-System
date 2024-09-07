@@ -22,8 +22,7 @@ export class AuthService {
     return this.http.post<any>(url, body, { headers }).pipe(
       
       map(user => {
-        console.table(user),
-        this.currentUser = user;
+        this.currentUser = user.user;
         return user;
       }),
       catchError(error => {
