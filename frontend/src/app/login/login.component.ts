@@ -16,17 +16,21 @@ export class LoginComponent {
 
   login() {
     this.authService.login(this.username, this.password).subscribe(user => {
+      // console.log("user creds:", this.username, this.password)
+      console.log("Testing authService")
+      console.table(user)
       if (user) {
-      if (user.roles.includes('Super Admin')) {
-        this.router.navigate(['/super-admin']);
-      } else if (user.roles.includes('Group Admin')) {
-        this.router.navigate(['/groups']);
-      } else if (user.roles.includes('User')) {
-        this.router.navigate(['/chat']);
-      } else {
-        this.errorMessage = 'Invalid role';
+        if (user.roles.includes('Super Admin')) {
+          this.router.navigate(['/super-admin']);
+        } else if (user.roles.includes('Group Admin')) {
+          this.router.navigate(['/groups']);
+        } else if (user.roles.includes('User')) {
+          this.router.navigate(['/chat']);
+        } else {
+          this.errorMessage = 'Invalid role';
+        }
       }
-      }
+    console.log("User is null")
     }, error => {
       this.errorMessage = 'Invalid username or password';
     });
