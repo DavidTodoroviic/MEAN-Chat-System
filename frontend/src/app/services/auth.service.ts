@@ -64,7 +64,7 @@ export class AuthService {
     return this.currentUser;
   }
 
-  // New methods
+  
   isLoggedIn(): boolean {
     return this.isAuthenticated();
   }
