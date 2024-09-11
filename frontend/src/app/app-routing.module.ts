@@ -5,13 +5,11 @@ import { LogoutComponent } from './logout/logout.component';
 import { GroupManagementComponent } from './group-management/group-management.component';
 import { ChatComponent } from './chat/chat.component';
 import { SuperAdminComponent } from './super-admin/super-admin.component';
-import { ChannelSelectionComponent } from './channel-selection/channel-selection.component';  
-import { ManageUsersComponent } from './manage-users/manage-users.component';
+import { ChannelSelectionComponent } from './channel-selection/channel-selection.component';  // Corrected import statement
 
 const routes: Routes = [
   { path: '', redirectTo: '/login', pathMatch: 'full' },
   { path: 'super-admin', component: SuperAdminComponent },
-  { path: 'manage-users', component: ManageUsersComponent },
   { path: 'channel-selection', component: ChannelSelectionComponent },
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },

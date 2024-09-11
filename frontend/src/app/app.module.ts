@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http'; 
+import { HttpClientModule } from '@angular/common/http'; // Import HttpClientModule
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { SuperAdminComponent } from './super-admin/super-admin.component';
@@ -10,7 +10,6 @@ import { LogoutComponent } from './logout/logout.component';
 import { GroupManagementComponent } from './group-management/group-management.component';
 import { ChatComponent } from './chat/chat.component';
 import { ChannelSelectionComponent } from './channel-selection/channel-selection.component';
-import { ManageUsersComponent } from './manage-users/manage-users.component'; 
 
 @NgModule({
   declarations: [
@@ -20,8 +19,7 @@ import { ManageUsersComponent } from './manage-users/manage-users.component';
     LogoutComponent,
     GroupManagementComponent,
     ChatComponent,
-    ChannelSelectionComponent,
-    ManageUsersComponent
+    ChannelSelectionComponent
   ],
   imports: [
     BrowserModule,

@@ -1,45 +1,71 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Group } from '../models/group.model';
+import { Channel } from '../models/channel.model'; // Import Channel model
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
-  private baseUrl = 'http://your-api-url/groups';
-
-  constructor(private http: HttpClient) {}
+  private groups: Group[] = [
+    { id: '1', name: 'Group 1', channels: [{ id: '1', name: 'Channel 1', users: [], groupId: '1' }], createdBy: 'user1' },
+    { id: '2', name: 'Group 2', channels: [], createdBy: 'user2' }
+  ];
 
   getGroups(): Observable<Group[]> {
-    return this.http.get<Group[]>(`${this.baseUrl}`);
+    return of(this.groups);
   }
 
-  addGroup(group: Group): Observable<Group> {
-    return this.http.post<Group>(`${this.baseUrl}`, group);
-  }
-
-  updateGroup(group: Group): Observable<Group> {
-    return this.http.put<Group>(`${this.baseUrl}/${group.id}`, group);
-  }
-
-  deleteGroup(groupId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${groupId}`);
+  addGroup(name: string, createdBy: string): Observable<void> {
+    const newGroup = { id: (this.groups.length + 1).toString(), name, channels: [], createdBy };
+    this.groups.push(newGroup);
+    this.saveToLocalStorage();
+    return of();
   }
 
   addChannel(groupId: string, channelName: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/${groupId}/channels`, { name: channelName });
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      const newChannel: Channel = {
+        id: (group.channels.length + 1).toString(),
+        name: channelName,
+        users: [],
+        groupId: groupId // Include groupId property
+      };
+      group.channels.push(newChannel);
+      this.saveToLocalStorage();
+    }
+    return of();
   }
 
   addUserToGroup(groupId: string, userId: string): Observable<void> {
-    return this.http.post<void>(`${this.baseUrl}/${groupId}/users`, { userId });
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      group.channels.forEach(channel => {
+        if (!channel.users) {
+          channel.users = [];
+        }
+        channel.users.push(userId);
+      });
+      this.saveToLocalStorage();
+    }
+    return of();
   }
 
-  removeUserFromChannel(groupId: string, channelId: string, userId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${groupId}/channels/${channelId}/users/${userId}`);
+  deleteGroup(groupId: string): Observable<void> {
+    this.groups = this.groups.filter(g => g.id !== groupId);
+    this.saveToLocalStorage();
+    return of();
   }
 
-  removeUserFromGroup(groupId: string, userId: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/${groupId}/users/${userId}`);
+  private saveToLocalStorage() {
+    localStorage.setItem('groups', JSON.stringify(this.groups));
+  }
+
+  loadFromLocalStorage() {
+    const storedGroups = localStorage.getItem('groups');
+    if (storedGroups) {
+      this.groups = JSON.parse(storedGroups);
+    }
   }
 }
