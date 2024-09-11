@@ -1,41 +1,72 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { Group } from '../models/group.model';
+import { Channel } from '../models/channel.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GroupService {
-  private apiUrl = 'http://localhost:3000/groups'; // Replace with your API URL
+  private groups: Group[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   getGroups(): Observable<Group[]> {
-    return this.http.get<Group[]>(this.apiUrl);
+    return of(this.groups);
   }
 
   addGroup(group: Group): Observable<Group> {
-    return this.http.post<Group>(this.apiUrl, group);
+    this.groups.push(group);
+    return of(group);
   }
 
-  addChannel(groupId: string, channelName: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${groupId}/channels`, { name: channelName });
+    addChannel(groupId: string, channelName: string): Observable<void> {
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      const newChannel: Channel = {
+        id: this.generateId(),
+        name: channelName,
+        groupId: groupId,
+        users: []
+      };
+      group.channels.push(newChannel);
+    }
+    return of();
   }
 
   addUserToGroup(groupId: string, userId: string): Observable<void> {
-    return this.http.post<void>(`${this.apiUrl}/${groupId}/users`, { userId });
+    const group = this.groups.find(g => g.id === groupId);
+    if (group && !group.users.includes(userId)) {
+      group.users.push(userId);
+    }
+    return of();
   }
 
   removeUserFromGroup(groupId: string, userId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${groupId}/users/${userId}`);
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      group.users = group.users.filter(id => id !== userId);
+    }
+    return of();
   }
 
   removeUserFromChannel(groupId: string, channelId: string, userId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${groupId}/channels/${channelId}/users/${userId}`);
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      const channel = group.channels.find(c => c.id === channelId);
+      if (channel) {
+        channel.users = channel.users.filter(id => id !== userId);
+      }
+    }
+    return of();
   }
 
   deleteGroup(groupId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${groupId}`);
+    this.groups = this.groups.filter(g => g.id !== groupId);
+    return of();
+  }
+
+  private generateId(): string {
+    return Math.random().toString(36).substr(2, 9);
   }
 }

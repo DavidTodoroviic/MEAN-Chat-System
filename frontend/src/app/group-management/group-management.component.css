@@ -5,27 +5,22 @@
   border: 1px solid #ccc;
   border-radius: 5px;
 }
-
 .group-management-container h2 {
   text-align: center;
 }
-
 .group-management-container .error {
   color: red;
   font-size: 0.8em;
 }
-
 .group-management-container ul {
   list-style-type: none;
   padding: 0;
 }
-
 .group-management-container ul li {
   display: flex;
   justify-content: space-between;
   padding: 0.5em 0;
 }
-
 .group-management-container ul li button {
   background-color: red;
   color: white;
