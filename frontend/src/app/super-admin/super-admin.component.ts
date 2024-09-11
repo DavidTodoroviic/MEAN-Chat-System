@@ -14,29 +14,34 @@ export class SuperAdminComponent {
     email: '', 
     password: '',  // Initialize password
     roles: ['User'], 
-    groups: []  // Initialize groupsts
+    groups: []  // Initialize groups
   };
 
   constructor(private userService: UserService) {}
 
   createUser() {
-    this.userService.createUser(this.newUser).subscribe(
-      () => {
-        console.log('User created successfully');
-        this.newUser = { 
-          id: '', 
-          username: '', 
-          email: '', 
-          password: '',  // Reset password
-          roles: ['User'], 
-          groups: []  // Reset groupsts
-        };
-        console.log("createUser from super-admin.component.ts");
-        console.table(this.newUser);
-      },
-      (error) => {
-        console.error('Error creating user', error);
+    this.userService.usernameExists(this.newUser.username).subscribe(exists => {
+      if (exists) {
+        console.error('Username already exists');
+        return;
       }
-    );
+
+      this.userService.createUser(this.newUser).subscribe(
+        () => {
+          console.log('User created successfully');
+          this.newUser = { 
+            id: '', 
+            username: '', 
+            email: '', 
+            password: '',  // Reset password
+            roles: ['User'], 
+            groups: []  // Reset groups
+          };
+        },
+        (error) => {
+          console.error('Error creating user', error);
+        }
+      );
+    });
   }
 }

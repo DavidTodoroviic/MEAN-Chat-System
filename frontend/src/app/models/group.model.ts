@@ -5,4 +5,6 @@ export interface Group {
   name: string;
   createdBy: string; // User ID of the creator
   channels: Channel[]; // Array of Channel objects
+  users: string[]; // Array of user IDs
+  newChannelName: string;
 }
