@@ -169,10 +169,10 @@ const checkRole = roles => (req, res, next) => {
 };
 
 // Promote a user to Group Admin
-app.post('/api/users/promote', (req, res) => {
-  const userId = req.body.userId;
+app.post('/api/promote', checkRole(['Super Admin']), (req, res) => {
+  const { userId } = req.body;
+  
   const user = data.users.find(user => user.id === userId);
-
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
   }
@@ -186,18 +186,18 @@ app.post('/api/users/promote', (req, res) => {
   }
 });
 
-// Delete a user by ID
-app.delete('/api/users/:id', (req, res) => {
+// Remove a user
+app.delete('/api/users/:id', checkRole(['Super Admin']), (req, res) => {
   const userId = req.params.id;
+  
   const userIndex = data.users.findIndex(user => user.id === userId);
-
   if (userIndex === -1) {
     return res.status(404).json({ message: 'User not found' });
   }
 
   data.users.splice(userIndex, 1);
   saveData();
-  res.sendStatus(204);
+  res.status(200).json({ message: 'User removed' });
 });
 
 // Start the server

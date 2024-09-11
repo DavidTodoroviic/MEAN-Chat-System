@@ -22,9 +22,9 @@ export class UserService {
     return this.http.get<User[]>(this.apiUrl);
   }
 
-    // Delete a user by ID
-  deleteUser(userId: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${userId}`);
+  // Delete a user by username
+  deleteUser(username: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/username/${username}`);
   }
 
   // Promote a user to Group Admin
