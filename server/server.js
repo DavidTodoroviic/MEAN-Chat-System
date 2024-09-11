@@ -61,6 +61,13 @@ app.post('/api/users', (req, res) => {
   res.status(201).json(newUser);
 });
 
+// Check if a user exists
+app.get('/api/users/exists/:username', (req, res) => {
+  const { username } = req.params;
+  const userExists = data.users.some(user => user.username === username);
+  res.status(200).json(userExists);
+});
+
 // Get all users
 app.get('/api/users', (req, res) => {
   res.json(data.users);
