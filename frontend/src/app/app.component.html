@@ -1,25 +1,18 @@
 <nav>
   <ul>
     <li *ngIf="!isLoggedIn()"><a routerLink="/login">Login</a></li>
-    <li *ngIf="isLoggedIn()"><a routerLink="/logout">Logout</a></li>
+
+     <!-- Super Admin can access Super Admin Panel -->
+     <li *ngIf="isSuperAdmin()"><a routerLink="/super-admin">Super Admin Panel</a></li>
 
     <!-- Super Admin can access Group Management -->
     <li *ngIf="isSuperAdmin() || isAdmin()"><a routerLink="/groups">Group Management</a></li>
     
-    <!-- Super Admin can access Super Admin Panel -->
-    <li *ngIf="isSuperAdmin()"><a routerLink="/super-admin">Super Admin Panel</a></li>
-    
     <!-- Users can access Chat -->
     <li *ngIf="isUser() || isSuperAdmin() || isAdmin()"><a routerLink="/chat">Chat</a></li>
+    <li *ngIf="isLoggedIn()"><a routerLink="/logout">Logout</a></li>
   </ul>
 </nav>
 
-<!-- Channel Selection HTML for all users -->
-<div *ngIf="isLoggedIn()">
-  <h2>Select a Channel</h2>
-  <ul>
-    <li *ngFor="let channel of channels"><a [routerLink]="['/chat', channel.id]">{{ channel.name }}</a></li>
-  </ul>
-</div>
 
 <router-outlet></router-outlet>
