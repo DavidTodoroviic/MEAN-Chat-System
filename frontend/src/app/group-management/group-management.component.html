@@ -7,7 +7,6 @@
     </div>
     <div *ngFor="let group of groups" class="p-3 mb-4 border rounded">
       <h3 class="text-center">{{ group.name }}</h3>
-      <button (click)="deleteGroup(group.id)" class="btn btn-danger mt-3 w-100">Delete Group</button>
       <div class="mt-3">
         <input [(ngModel)]="group.newChannelName" placeholder="New Channel Name" class="form-control" />
         <button (click)="addChannel(group.id, group.newChannelName)" class="btn btn-primary mt-3 w-100">Add Channel</button>
@@ -21,9 +20,23 @@
       <div class="mt-3">
         <h4>Channels</h4>
         <ul class="list-group">
-          <li *ngFor="let channel of group.channels" class="list-group-item d-flex justify-content-between align-items-center">
-            {{ channel.name }}
-            <button (click)="removeUserFromChannel(group.id, channel.id, selectedUserId)" class="btn btn-danger">Remove User from Channel</button>
+          <li *ngFor="let channel of group.channels" class="list-group-item">
+            <div class="d-flex justify-content-between align-items-center">
+              {{ channel.name }}
+              <button (click)="removeChannel(group.id, channel.id)" class="btn btn-danger btn-sm">X</button>
+            </div>
+            <div class="mt-2 d-flex align-items-center">
+              <select [(ngModel)]="selectedUserId" class="form-control">
+                <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
+              </select>
+              <button (click)="addUserToChannel(group.id, channel.id, selectedUserId)" class="btn btn-success btn-sm ml-2">+</button>
+            </div>
+            <ul class="list-group mt-2">
+              <li *ngFor="let userId of channel.users" class="list-group-item d-flex justify-content-between align-items-center">
+                {{ getUserNameById(userId) }}
+                <button (click)="removeUserFromChannel(group.id, channel.id, userId)" class="btn btn-danger btn-sm">X</button>
+              </li>
+            </ul>
           </li>
         </ul>
       </div>
@@ -32,10 +45,11 @@
         <ul class="list-group">
           <li *ngFor="let userId of group.users" class="list-group-item d-flex justify-content-between align-items-center">
             {{ getUserNameById(userId) }}
-            <button (click)="removeUserFromGroup(group.id, userId)" class="btn btn-danger">Remove User from Group</button>
+            <button (click)="removeUserFromGroup(group.id, userId)" class="btn btn-danger btn-sm">X</button>
           </li>
         </ul>
       </div>
+      <button (click)="deleteGroup(group.id)" class="btn btn-danger mt-3 w-100">Delete Group</button>
     </div>
   </div>
 </div>

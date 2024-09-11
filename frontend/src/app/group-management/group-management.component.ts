@@ -96,6 +96,20 @@ export class GroupManagementComponent implements OnInit {
     this.loadGroups();
   }
 
+    removeChannel(groupId: string, channelId: string): void {
+    this.groupService.removeChannel(groupId, channelId).subscribe(
+      () => this.loadGroups(),
+      (error) => console.error('Error removing channel', error)
+    );
+  }
+  
+  addUserToChannel(groupId: string, channelId: string, userId: string): void {
+    this.groupService.addUserToChannel(groupId, channelId, userId).subscribe(
+      () => this.loadGroups(),
+      (error) => console.error('Error adding user to channel', error)
+    );
+  }
+
   getUserNameById(userId: string): string {
     const user = this.users.find(u => u.id === userId);
     return user ? user.username : 'Unknown';

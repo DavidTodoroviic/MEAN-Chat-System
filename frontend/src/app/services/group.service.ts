@@ -66,6 +66,25 @@ export class GroupService {
     return of();
   }
 
+  removeChannel(groupId: string, channelId: string): Observable<void> {
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      group.channels = group.channels.filter(c => c.id !== channelId);
+    }
+    return of();
+  }
+
+  addUserToChannel(groupId: string, channelId: string, userId: string): Observable<void> {
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      const channel = group.channels.find(c => c.id === channelId);
+      if (channel && !channel.users.includes(userId)) {
+        channel.users.push(userId);
+      }
+    }
+    return of();
+  }
+
   private generateId(): string {
     return Math.random().toString(36).substr(2, 9);
   }
