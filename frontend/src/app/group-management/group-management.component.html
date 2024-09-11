@@ -1,37 +1,39 @@
-<h2>Manage Groups</h2>
-<div class="group-management-container">
-  <label for="newGroupName">New Group Name:</label>
-  <input id="newGroupName" [(ngModel)]="newGroupName" placeholder="Enter group name">
-  <button (click)="createGroup()" class="btn btn-primary mt-3">Add Group</button>
-</div>
-<ul>
-  <li *ngFor="let group of groups">
+<div>
+  <h2>Group Management</h2>
+  <div>
+    <input [(ngModel)]="newGroupName" placeholder="New Group Name" />
+    <button (click)="createGroup()">Create Group</button>
+  </div>
+  <div *ngFor="let group of groups">
     <h3>{{ group.name }}</h3>
     <div>
-      <label for="newChannelName-{{group.id}}">New Channel Name:</label>
-      <input id="newChannelName-{{group.id}}" [(ngModel)]="group.newChannelName" placeholder="Enter channel name">
-      <button (click)="addChannel(group.id, group.newChannelName)" class="btn btn-primary mt-3">Add Channel</button>
+      <input [(ngModel)]="group.newChannelName" placeholder="New Channel Name" />
+      <button (click)="addChannel(group.id, group.newChannelName)">Add Channel</button>
     </div>
-    <h4>Channels</h4>
-    <ul>
-      <li *ngFor="let channel of group.channels">
-        {{ channel.name }}
-        <ul>
-          <li *ngFor="let user of channel.users">
-            {{ user.username }}
-            <button (click)="removeUserFromChannel(group.id, channel.id, user.id)" class="btn btn-danger">Remove User</button>
-          </li>
-        </ul>
-        <div>
-          <label for="addUser-{{group.id}}-{{channel.id}}">Select User to Add:</label>
-          <select id="addUser-{{group.id}}-{{channel.id}}" [(ngModel)]="selectedUserId">
-            <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
-          </select>
-          <button (click)="addUserToChannel(group.id, channel.id, selectedUserId)" class="btn btn-primary mt-3">Add User to Channel</button>
-        </div>
-      </li>
-    </ul>
-    <button (click)="removeUserFromGroup(group.id, selectedUserId)" class="btn btn-danger mt-3">Remove User from Group</button>
-    <button (click)="deleteGroup(group.id)" class="btn btn-primary mt-3">Delete Group</button>
-  </li>
-</ul>
+    <div>
+      <select [(ngModel)]="selectedUserId">
+        <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+      </select>
+      <button (click)="addUserToGroup(group.id, selectedUserId)">Add User to Group</button>
+    </div>
+    <div>
+      <h4>Channels</h4>
+      <ul>
+        <li *ngFor="let channel of group.channels">
+          {{ channel.name }}
+          <button (click)="removeUserFromChannel(group.id, channel.id, selectedUserId)">Remove User from Channel</button>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4>Users</h4>
+      <ul>
+        <li *ngFor="let userId of group.users">
+          {{ getUserNameById(userId) }}
+          <button (click)="removeUserFromGroup(group.id, userId)">Remove User from Group</button>
+        </li>
+      </ul>
+    </div>
+    <button (click)="deleteGroup(group.id)">Delete Group</button>
+  </div>
+</div>

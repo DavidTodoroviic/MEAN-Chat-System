@@ -14,6 +14,7 @@ export class GroupManagementComponent implements OnInit {
   users: User[] = [];
   newGroupName: string = '';
   selectedUserId: string = '';
+  currentUserId: string = 'currentUserId'; // Replace with actual current user ID
 
   constructor(private groupService: GroupService, private userService: UserService) {}
 
@@ -34,7 +35,14 @@ export class GroupManagementComponent implements OnInit {
 
   createGroup() {
     if (this.newGroupName) {
-      const newGroup: Group = { id: '', name: this.newGroupName, createdBy: '', channels: [], users: [], newChannelName: '' };
+      const newGroup: Group = {
+        id: this.generateId(),
+        name: this.newGroupName,
+        createdBy: this.currentUserId,
+        channels: [],
+        users: [],
+        newChannelName: ''
+      };
       this.groupService.addGroup(newGroup).subscribe(group => {
         this.groups.push(group);
         this.newGroupName = '';
@@ -47,32 +55,41 @@ export class GroupManagementComponent implements OnInit {
       this.groupService.addChannel(groupId, channelName).subscribe(() => {
         const group = this.groups.find(g => g.id === groupId);
         if (group) {
-          group.channels.push({ id: '', name: channelName, groupId: groupId, users: [] });
-          group.newChannelName = ''; // Clear the input field
+          group.channels.push({ id: this.generateId(), name: channelName, groupId, users: [] });
+          group.newChannelName = '';
         }
       });
     }
   }
 
-  addUserToChannel(groupId: string, channelId: string, userId: string) {
+  addUserToGroup(groupId: string, userId: string) {
     this.groupService.addUserToGroup(groupId, userId).subscribe(() => {
       const group = this.groups.find(g => g.id === groupId);
-      const channel = group?.channels.find(c => c.id === channelId);
-      const user = this.users.find(u => u.id === userId);
-      if (channel && user) {
-        channel.users.push(user);
+      if (group && !group.users.includes(userId)) {
+        group.users.push(userId);
+      }
+    });
+  }
+
+  removeUserFromGroup(groupId: string, userId: string) {
+    this.groupService.removeUserFromGroup(groupId, userId).subscribe(() => {
+      const group = this.groups.find(g => g.id === groupId);
+      if (group) {
+        group.users = group.users.filter(id => id !== userId);
       }
     });
   }
 
   removeUserFromChannel(groupId: string, channelId: string, userId: string) {
-    const group = this.groups.find(g => g.id === groupId);
-    if (group) {
-      const channel = group.channels.find(c => c.id === channelId);
-      if (channel) {
-        channel.users = channel.users.filter(u => u.id !== userId);
+    this.groupService.removeUserFromChannel(groupId, channelId, userId).subscribe(() => {
+      const group = this.groups.find(g => g.id === groupId);
+      if (group) {
+        const channel = group.channels.find(c => c.id === channelId);
+        if (channel) {
+          channel.users = channel.users.filter(user => user.id !== userId);
+        }
       }
-    }
+    });
   }
 
   deleteGroup(groupId: string) {
@@ -81,12 +98,12 @@ export class GroupManagementComponent implements OnInit {
     });
   }
 
-  removeUserFromGroup(groupId: string, userId: string) {
-    this.groupService.removeUserFromGroup(groupId, userId).subscribe(() => {
-      const group = this.groups.find(g => g.id === groupId);
-      if (group) {
-        group.users = group.users.filter(u => u.id !== userId);
-      }
-    });
+  generateId(): string {
+    return Math.random().toString(36).substr(2, 9);
+  }
+
+  getUserNameById(userId: string): string {
+    const user = this.users.find(user => user.id === userId);
+    return user ? user.username : 'Unknown User';
   }
 }
