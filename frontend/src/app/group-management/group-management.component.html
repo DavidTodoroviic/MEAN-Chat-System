@@ -1,37 +1,39 @@
-<h2>Manage Groups</h2>
-
 <div>
-  <label>New Group Name:</label>
-  <input [(ngModel)]="groupName" placeholder="Enter group name">
-  <button (click)="addGroup()" class="btn btn-primary mt-3">Add Group</button>
-</div>
-
-<ul>
-  <li *ngFor="let group of groups">
+  <h2>Group Management</h2>
+  <div>
+    <input [(ngModel)]="newGroupName" placeholder="New Group Name" />
+    <button (click)="createGroup()">Create Group</button>
+  </div>
+  <div *ngFor="let group of groups">
     <h3>{{ group.name }}</h3>
-
     <div>
-      <label>New Channel Name:</label>
-      <input [(ngModel)]="channelName" placeholder="Enter channel name">
-      <button (click)="addChannel(group.id)" class="btn btn-primary mt-3">Add Channel</button>
+      <input [(ngModel)]="group.newChannelName" placeholder="New Channel Name" />
+      <button (click)="addChannel(group.id, group.newChannelName)">Add Channel</button>
     </div>
-
-    <h4>Channels</h4>
-    <ul>
-      <li *ngFor="let channel of group.channels">
-        {{ channel.name }}
-      </li>
-    </ul>
-
     <div>
-      <label>Select User to Add:</label>
       <select [(ngModel)]="selectedUserId">
-        <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
+        <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
       </select>
-      <button (click)="addUserToGroup(group.id)" class="btn btn-primary mt-3">Add User to Group</button>
+      <button (click)="addUserToGroup(group.id, selectedUserId)">Add User to Group</button>
     </div>
-
-    <button (click)="deleteGroup(group.id)" class="btn btn-primary mt-3">Delete Group</button>
-  </li>
-</ul>
-
+    <div>
+      <h4>Channels</h4>
+      <ul>
+        <li *ngFor="let channel of group.channels">
+          {{ channel.name }}
+          <button (click)="removeUserFromChannel(group.id, channel.id, selectedUserId)">Remove User from Channel</button>
+        </li>
+      </ul>
+    </div>
+    <div>
+      <h4>Users</h4>
+      <ul>
+        <li *ngFor="let userId of group.users">
+          {{ getUserNameById(userId) }}
+          <button (click)="removeUserFromGroup(group.id, userId)">Remove User from Group</button>
+        </li>
+      </ul>
+    </div>
+    <button (click)="deleteGroup(group.id)">Delete Group</button>
+  </div>
+</div>
