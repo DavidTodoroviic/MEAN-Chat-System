@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { GroupService } from '../services/group.service';
-import { Group } from '../models/group.model';
+import { GroupService } from '../services/group.service';  // Service for groups
+import { Group } from '../models/group.model';  // Group model
 
 @Component({
   selector: 'app-channel-selection',
