@@ -1,0 +1,46 @@
+.manage-users-container {
+  max-width: 50%;
+  margin: 0 auto;
+  padding: 1em;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.manage-users-container h2 {
+  text-align: center;
+}
+
+.manage-users-container table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.manage-users-container th, .manage-users-container td {
+  padding: 0.5em;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.manage-users-container th {
+  background-color: #f2f2f2;
+}
+
+.manage-users-container .actions button {
+  margin-right: 0.5em;
+}
+
+.manage-users-container .actions .delete-btn {
+  background-color: red;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.manage-users-container .actions .promote-btn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+}

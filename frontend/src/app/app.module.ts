@@ -27,7 +27,7 @@ import { ManageUsersComponent } from './manage-users/manage-users.component';
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    HttpClientModule // Add HttpClientModule to imports array
+    HttpClientModule 
   ],
   bootstrap: [AppComponent]
 })

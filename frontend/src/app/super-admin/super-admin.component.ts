@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { UserService } from '../services/user.service';  // Correct path to UserService
-import { User } from '../models/user.model';  // Correct path to User model
+import { UserService } from '../services/user.service';  
+import { User } from '../models/user.model';  
 
 @Component({
   selector: 'app-super-admin',
@@ -12,9 +12,9 @@ export class SuperAdminComponent {
     id: '', 
     username: '', 
     email: '', 
-    password: '',  // Initialize password
+    password: '',  
     roles: ['User'], 
-    groups: []  // Initialize groups
+    groups: []  
   };
 
   constructor(private userService: UserService) {}

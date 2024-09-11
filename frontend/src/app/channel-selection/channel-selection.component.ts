@@ -24,7 +24,6 @@ export class ChannelSelectionComponent implements OnInit {
   joinChannel() {
     if (this.selectedChannelId) {
       console.log(`User joined channel with ID: ${this.selectedChannelId}`);
-      // Logic to join the channel
     }
   }
 }

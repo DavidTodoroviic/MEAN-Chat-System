@@ -31,21 +31,6 @@ export class AuthService {
       })
     );
 
-    // // Simulate the login logic
-    // if (username === 'super' && password === '123') {
-    //   user = { username, roles: ['Super Admin'] };
-    // } else if (username === 'admin' && password === '123') {
-    //   user = { username, roles: ['Group Admin'] };
-    // } else if (username === 'user' && password === '123') {
-    //   user = { username, roles: ['User'] };
-    // }
-
-    // if (user) {
-    //   this.currentUser = user;
-    //   return of(user); // Return the user as an Observable
-    // } else {
-    //   return of(null); // Return null as an Observable in case of failure
-    // }
   }
 
   logout() {

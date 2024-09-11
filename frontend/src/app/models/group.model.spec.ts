@@ -11,7 +11,6 @@ describe('Group Model', () => {
     const group: Group = {
       id: '1',
       name: 'Test Group',
-      createdBy: 'user1',
       channels: channels,
       users: ['user1', 'user2', 'user3'],
       newChannelName: "Main"
@@ -19,7 +18,6 @@ describe('Group Model', () => {
 
     expect(group.id).toBe('1');
     expect(group.name).toBe('Test Group');
-    expect(group.createdBy).toBe('user1');
     expect(group.channels.length).toBe(2);
     expect(group.users.length).toBe(3);
   });

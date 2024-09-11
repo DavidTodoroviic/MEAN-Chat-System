@@ -1,5 +1,4 @@
-<!-- frontend/src/app/manage-users/manage-users.component.html -->
-<div>
+<div class="manage-users-container">
   <h2>Manage Users</h2>
   <table>
     <thead>
@@ -13,9 +12,9 @@
       <tr *ngFor="let user of users">
         <td>{{ user.username }}</td>
         <td>{{ user.email }}</td>
-        <td>
-          <button (click)="deleteUser(user.id)">Delete</button>
-          <button (click)="promoteUser(user.id)">Promote to Admin</button>
+        <td class="actions">
+          <button class="promote-btn" (click)="promoteUser(user.id)">Promote to Admin</button>
+          <button class="delete-btn" (click)="deleteUser(user.id)">X</button>
         </td>
       </tr>
     </tbody>

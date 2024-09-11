@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { User } from '../models/user.model';  // Import your User model
+import { User } from '../models/user.model'; 
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private apiUrl = 'http://localhost:3000/api/users';  // Update with your actual API URL
+  private apiUrl = 'http://localhost:3000/api/users'; 
 
   constructor(private http: HttpClient) { }
 
@@ -34,7 +34,6 @@ export class UserService {
 
   // Get the current user ID
   getCurrentUserId(): string {
-    // Assuming the current user ID is stored in localStorage or some other storage
     return localStorage.getItem('currentUserId') || 'defaultUserId';
   }
 
