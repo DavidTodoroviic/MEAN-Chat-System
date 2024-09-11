@@ -4,6 +4,7 @@
     padding: 1em;
     border: 1px solid #ccc;
     border-radius: 5px;
+    padding-left: 1em;
   }
   
   .login-container h2 {
@@ -13,5 +14,23 @@
   .login-container .error {
     color: red;
     font-size: 0.8em;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .username-container {
+    margin-top:4em;
+    margin-bottom: 1em;
+    padding-left: 2em;
+  }
+  
+  .password-container {
+    margin-top: 2em;
+    margin-bottom: 6em;
+    padding-left: 2em;
   }
   
