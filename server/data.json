@@ -39,6 +39,26 @@
         "User"
       ],
       "groups": []
+    },
+    {
+      "id": "1726042871824",
+      "username": "user5",
+      "email": "test4@mail.co",
+      "password": "123",
+      "roles": [
+        "User"
+      ],
+      "groups": "Group 1"
+    },
+    {
+      "id": "1726042986205",
+      "username": "user4",
+      "email": "test4@mail.co",
+      "password": "123",
+      "roles": [
+        "User"
+      ],
+      "groups": "Group 1"
     }
   ],
   "groups": [],

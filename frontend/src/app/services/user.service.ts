@@ -37,4 +37,9 @@ export class UserService {
     // Assuming the current user ID is stored in localStorage or some other storage
     return localStorage.getItem('currentUserId') || 'defaultUserId';
   }
+
+  // Check if a username already exists
+  usernameExists(username: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/exists/${username}`);
+  }
 }
