@@ -14,96 +14,75 @@ export class GroupManagementComponent implements OnInit {
   users: User[] = [];
   newGroupName: string = '';
   selectedUserId: string = '';
-  currentUserId: string = 'currentUserId'; // Replace with actual current user ID
 
   constructor(private groupService: GroupService, private userService: UserService) {}
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.loadGroups();
     this.loadUsers();
   }
 
-  loadGroups() {
-    this.groupService.getGroups().subscribe(groups => {
-      this.groups = groups.map(group => ({ ...group, newChannelName: '' })); // Initialize newChannelName
-    });
+  loadGroups(): void {
+    this.groupService.getGroups().subscribe(
+      (groups) => this.groups = groups,
+      (error) => console.error('Error loading groups', error)
+    );
   }
 
-  loadUsers() {
-    this.userService.getUsers().subscribe(users => this.users = users);
+  loadUsers(): void {
+    this.userService.getUsers().subscribe(
+      (users) => this.users = users,
+      (error) => console.error('Error loading users', error)
+    );
   }
 
-  createGroup() {
-    if (this.newGroupName) {
-      const newGroup: Group = {
-        id: this.generateId(),
-        name: this.newGroupName,
-        createdBy: this.currentUserId,
-        channels: [],
-        users: [],
-        newChannelName: ''
-      };
-      this.groupService.addGroup(newGroup).subscribe(group => {
+  createGroup(): void {
+    const newGroup: Group = { id: this.generateId(), name: this.newGroupName, channels: [], users: [] };
+    this.groupService.addGroup(newGroup).subscribe(
+      (group) => {
         this.groups.push(group);
         this.newGroupName = '';
-      });
-    }
+      },
+      (error) => console.error('Error creating group', error)
+    );
   }
 
-  addChannel(groupId: string, channelName: string) {
+  addChannel(groupId: string, channelName: string): void {
     if (channelName) {
-      this.groupService.addChannel(groupId, channelName).subscribe(() => {
-        const group = this.groups.find(g => g.id === groupId);
-        if (group) {
-          group.channels.push({ id: this.generateId(), name: channelName, groupId, users: [] });
-          group.newChannelName = '';
-        }
-      });
+      this.groupService.addChannel(groupId, channelName).subscribe(
+        () => this.loadGroups(),
+        (error) => console.error('Error adding channel', error)
+      );
     }
   }
 
-  addUserToGroup(groupId: string, userId: string) {
-    this.groupService.addUserToGroup(groupId, userId).subscribe(() => {
-      const group = this.groups.find(g => g.id === groupId);
-      if (group && !group.users.includes(userId)) {
-        group.users.push(userId);
-      }
-    });
+  addUserToGroup(groupId: string, userId: string): void {
+    this.groupService.addUserToGroup(groupId, userId).subscribe(
+      () => this.loadGroups(),
+      (error) => console.error('Error adding user to group', error)
+    );
   }
 
-  removeUserFromGroup(groupId: string, userId: string) {
-    this.groupService.removeUserFromGroup(groupId, userId).subscribe(() => {
-      const group = this.groups.find(g => g.id === groupId);
-      if (group) {
-        group.users = group.users.filter(id => id !== userId);
-      }
-    });
+  removeUserFromGroup(groupId: string, userId: string): void {
+    this.groupService.removeUserFromGroup(groupId, userId).subscribe(
+      () => this.loadGroups(),
+      (error) => console.error('Error removing user from group', error)
+    );
   }
 
-  removeUserFromChannel(groupId: string, channelId: string, userId: string) {
-    this.groupService.removeUserFromChannel(groupId, channelId, userId).subscribe(() => {
-      const group = this.groups.find(g => g.id === groupId);
-      if (group) {
-        const channel = group.channels.find(c => c.id === channelId);
-        if (channel) {
-          channel.users = channel.users.filter(user => user.id !== userId);
-        }
-      }
-    });
-  }
-
-  deleteGroup(groupId: string) {
-    this.groupService.deleteGroup(groupId).subscribe(() => {
-      this.groups = this.groups.filter(g => g.id !== groupId);
-    });
-  }
-
-  generateId(): string {
-    return Math.random().toString(36).substr(2, 9);
+  removeUserFromChannel(groupId: string, channelId: string, userId: string): void {
+    this.groupService.removeUserFromChannel(groupId, channelId, userId).subscribe(
+      () => this.loadGroups(),
+      (error) => console.error('Error removing user from channel', error)
+    );
   }
 
   getUserNameById(userId: string): string {
-    const user = this.users.find(user => user.id === userId);
-    return user ? user.username : 'Unknown User';
+    const user = this.users.find(u => u.id === userId);
+    return user ? user.username : 'Unknown';
+  }
+
+  private generateId(): string {
+    return Math.random().toString(36).substr(2, 9);
   }
 }
