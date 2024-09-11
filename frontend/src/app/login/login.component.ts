@@ -14,32 +14,26 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
-        login() {
-      this.authService.login(this.username, this.password).subscribe(user => {
-        if (user) {
-          console.log("Testing authService");
-          console.table(user);
-          if (user.roles) {
-            console.log("User roles:", user.roles);
-            if (user.roles.includes('Super Admin')) {
-              this.router.navigate(['/super-admin']);
-            } else if (user.roles.includes('Group Admin')) {
-              this.router.navigate(['/groups']);
-            } else if (user.roles.includes('User')) {
-              this.router.navigate(['/chat']);
-            } else {
-              this.errorMessage = 'Invalid role';
-            }
-          } else {
-            this.errorMessage = 'Roles not defined';
-          }
+  login() {
+    this.authService.login(this.username, this.password).subscribe(user => {
+      if (user) {
+        console.log("Testing authService");
+        console.table(user);
+        if (this.authService.hasRole("Super Admin")) {
+          this.router.navigate(['/super-admin']);
+        } else if (this.authService.hasRole("Group Admin")) {
+          this.router.navigate(['/groups']);
+        } else if (this.authService.hasRole("User")) {
+          this.router.navigate(['/chat']);
         } else {
-          this.errorMessage = 'Invalid username or password';
+          this.errorMessage = 'Invalid role';
         }
-      }, error => {
+      } else {
         this.errorMessage = 'Invalid username or password';
-      });
-    }
+      }
+    }, error => {
+      console.error("Error during login:", error);
+      this.errorMessage = 'Invalid username or password';
+    });
+  }
 }
-
-
