@@ -1,4 +1,3 @@
-// group-management.component.ts
 import { Component, OnInit } from '@angular/core';
 import { GroupService } from '../services/group.service';
 import { UserService } from '../services/user.service';
@@ -67,12 +66,18 @@ export class GroupManagementComponent implements OnInit {
   }
 
   removeUserFromChannel(groupId: string, channelId: string, userId: string) {
-    this.groupService.removeUserFromChannel(groupId, channelId, userId).subscribe(() => {
-      const group = this.groups.find(g => g.id === groupId);
-      const channel = group?.channels.find(c => c.id === channelId);
+    const group = this.groups.find(g => g.id === groupId);
+    if (group) {
+      const channel = group.channels.find(c => c.id === channelId);
       if (channel) {
         channel.users = channel.users.filter(u => u.id !== userId);
       }
+    }
+  }
+
+  deleteGroup(groupId: string) {
+    this.groupService.deleteGroup(groupId).subscribe(() => {
+      this.groups = this.groups.filter(g => g.id !== groupId);
     });
   }
 
@@ -82,12 +87,6 @@ export class GroupManagementComponent implements OnInit {
       if (group) {
         group.users = group.users.filter(u => u.id !== userId);
       }
-    });
-  }
-
-  deleteGroup(groupId: string) {
-    this.groupService.deleteGroup(groupId).subscribe(() => {
-      this.groups = this.groups.filter(g => g.id !== groupId);
     });
   }
 }

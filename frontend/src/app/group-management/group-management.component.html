@@ -1,10 +1,16 @@
+<h2>Manage Groups</h2>
+<div class="group-management-container">
+  <label for="newGroupName">New Group Name:</label>
+  <input id="newGroupName" [(ngModel)]="newGroupName" placeholder="Enter group name">
+  <button (click)="createGroup()" class="btn btn-primary mt-3">Add Group</button>
+</div>
 <ul>
   <li *ngFor="let group of groups">
     <h3>{{ group.name }}</h3>
     <div>
-      <label for="channelName-{{group.id}}">New Channel Name:</label>
-      <input id="channelName-{{group.id}}" [(ngModel)]="channelName" placeholder="Enter channel name">
-      <button (click)="addChannel(group.id)" class="btn btn-primary mt-3">Add Channel</button>
+      <label for="newChannelName-{{group.id}}">New Channel Name:</label>
+      <input id="newChannelName-{{group.id}}" [(ngModel)]="group.newChannelName" placeholder="Enter channel name">
+      <button (click)="addChannel(group.id, group.newChannelName)" class="btn btn-primary mt-3">Add Channel</button>
     </div>
     <h4>Channels</h4>
     <ul>
@@ -21,17 +27,11 @@
           <select id="addUser-{{group.id}}-{{channel.id}}" [(ngModel)]="selectedUserId">
             <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
           </select>
-          <button (click)="addUserToGroup(group.id)" class="btn btn-primary mt-3">Add User to Channel</button>
+          <button (click)="addUserToChannel(group.id, channel.id, selectedUserId)" class="btn btn-primary mt-3">Add User to Channel</button>
         </div>
       </li>
     </ul>
-    <div>
-      <label for="removeUser-{{group.id}}">Select User to Remove:</label>
-      <select id="removeUser-{{group.id}}" [(ngModel)]="selectedUserId">
-        <option *ngFor="let user of users" [value]="user.id">{{ user.username }}</option>
-      </select>
-      <button (click)="removeUserFromGroup(group.id, selectedUserId)" class="btn btn-danger mt-3">Remove User from Group</button>
-    </div>
+    <button (click)="removeUserFromGroup(group.id, selectedUserId)" class="btn btn-danger mt-3">Remove User from Group</button>
     <button (click)="deleteGroup(group.id)" class="btn btn-primary mt-3">Delete Group</button>
   </li>
 </ul>

@@ -13,7 +13,8 @@ describe('Group Model', () => {
       name: 'Test Group',
       createdBy: 'user1',
       channels: channels,
-      users: ['user1', 'user2', 'user3']
+      users: ['user1', 'user2', 'user3'],
+      newChannelName: "Main"
     };
 
     expect(group.id).toBe('1');
