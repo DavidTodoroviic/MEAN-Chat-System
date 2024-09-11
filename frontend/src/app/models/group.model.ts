@@ -5,5 +5,5 @@ export interface Group {
   name: string;
   channels: Channel[]; // Array of Channel objects
   users: string[]; // Array of user IDs
-  
+  newChannelName: string;
 }

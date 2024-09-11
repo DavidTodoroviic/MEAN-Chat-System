@@ -24,7 +24,12 @@ export class GroupManagementComponent implements OnInit {
 
   loadGroups(): void {
     this.groupService.getGroups().subscribe(
-      (groups) => this.groups = groups,
+      (groups) => {
+        this.groups = groups.map(group => ({
+          ...group,
+          newChannelName: '' // Initialize newChannelName
+        }));
+      },
       (error) => console.error('Error loading groups', error)
     );
   }
@@ -36,15 +41,21 @@ export class GroupManagementComponent implements OnInit {
     );
   }
 
-  createGroup(): void {
-    const newGroup: Group = { id: this.generateId(), name: this.newGroupName, channels: [], users: [] };
-    this.groupService.addGroup(newGroup).subscribe(
-      (group) => {
-        this.groups.push(group);
-        this.newGroupName = '';
-      },
-      (error) => console.error('Error creating group', error)
-    );
+    createGroup(): void {
+      const newGroup: Group = { 
+          id: this.generateId(), 
+          name: this.newGroupName, 
+          channels: [], 
+          users: [], 
+          newChannelName: '' // Initialize newChannelName
+      };
+      this.groupService.addGroup(newGroup).subscribe(
+        (group) => {
+          this.groups.push(group);
+          this.newGroupName = '';
+        },
+        (error) => console.error('Error creating group', error)
+      );
   }
 
   addChannel(groupId: string, channelName: string): void {
@@ -74,6 +85,13 @@ export class GroupManagementComponent implements OnInit {
     this.groupService.removeUserFromChannel(groupId, channelId, userId).subscribe(
       () => this.loadGroups(),
       (error) => console.error('Error removing user from channel', error)
+    );
+  }
+
+  deleteGroup(groupId: string): void {
+    this.groupService.deleteGroup(groupId).subscribe(
+      () => this.loadGroups(),
+      (error) => console.error('Error deleting group', error)
     );
   }
 

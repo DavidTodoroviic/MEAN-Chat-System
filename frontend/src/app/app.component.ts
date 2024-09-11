@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
     this.loadChannels();
   }
 
-
   isLoggedIn(): boolean {
     return this.authService.isLoggedIn();
   }

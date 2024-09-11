@@ -3,7 +3,8 @@
     <li *ngIf="!isLoggedIn()"><a routerLink="/login">Login</a></li>
 
      <!-- Super Admin can access Super Admin Panel -->
-     <li *ngIf="isSuperAdmin()"><a routerLink="/super-admin">Super Admin Panel</a></li>
+     <li *ngIf="isSuperAdmin()"><a routerLink="/super-admin">Create User</a></li>
+     <li *ngIf="isSuperAdmin()"><a routerLink="/manage-users">Manage Users</a></li>
 
     <!-- Super Admin can access Group Management -->
     <li *ngIf="isSuperAdmin() || isAdmin()"><a routerLink="/groups">Group Management</a></li>
