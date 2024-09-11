@@ -93,6 +93,7 @@ export class GroupManagementComponent implements OnInit {
       () => this.loadGroups(),
       (error) => console.error('Error deleting group', error)
     );
+    this.loadGroups();
   }
 
   getUserNameById(userId: string): string {
