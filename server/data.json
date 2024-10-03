@@ -6,7 +6,8 @@
       "email": "stefa@gmail.co",
       "password": "123",
       "roles": [
-        "User"
+        "User",
+        "Group Admin"
       ],
       "groups": []
     },

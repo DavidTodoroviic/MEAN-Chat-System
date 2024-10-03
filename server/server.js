@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const cors = require('cors');
+const mongoose = require('mongoose');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
@@ -10,10 +11,26 @@ const sockets = require('./sockets');
 sockets.init(server);
 
 const PORT = process.env.PORT || 3000;
+const MONGO_URI = 'mongodb://localhost:27017/mean-chat'; // Directly set the MongoDB URI
 
 // Middleware
 app.use(express.json());
 app.use(cors());  // Enable CORS for all routes
+
+// Connect to MongoDB
+mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('MongoDB connected'))
+  .catch(err => console.error('MongoDB connection error:', err));
+
+// Define Mongoose schemas and models
+const channelSchema = new mongoose.Schema({
+  id: String,
+  name: String,
+  groupId: String,
+  users: [String]
+});
+
+const Channel = mongoose.model('Channel', channelSchema);
 
 // Load data from JSON file
 let data = {};
@@ -26,7 +43,6 @@ try {
 // Initialise empty data structure
 data.users = data.users || [];
 data.groups = data.groups || [];
-data.channels = data.channels || [];
 
 // Save data to JSON file
 const saveData = () => {
@@ -36,8 +52,8 @@ const saveData = () => {
 // User Authentication
 app.post('/api/login', (req, res) => {
   const { username, password } = req.body;
-  console.log('Login request received')
-  console.table(req.body)
+  console.log('Login request received');
+  console.table(req.body);
   const user = data.users.find(user => user.username === username && user.password === password);
   if (user) {
     res.status(200).json({ message: 'Login successful', user });
@@ -55,7 +71,7 @@ app.post('/api/users', (req, res) => {
   }
 
   const newUser = { id: Date.now().toString(), username, email, password, roles, groups };
-  console.table(newUser)
+  console.table(newUser);
   data.users.push(newUser);
   saveData();
   res.status(201).json(newUser);
@@ -85,7 +101,6 @@ app.post('/api/groups', (req, res) => {
   const newGroup = { id: Date.now().toString(), name, admin: adminId, members: [adminId], channels: [] };
   data.groups.push(newGroup);
   admin.groups.push(newGroup.id);
-  // console.table(newGroup)
   saveData();
   res.status(201).json(newGroup);
 });
@@ -113,7 +128,7 @@ app.post('/api/groups/:groupId/users', (req, res) => {
 });
 
 // Create a new channel
-app.post('/api/channels', (req, res) => {
+app.post('/api/channels', async (req, res) => {
   const { name, groupId } = req.body;
 
   const group = data.groups.find(group => group.id === groupId);
@@ -121,19 +136,19 @@ app.post('/api/channels', (req, res) => {
     return res.status(400).json({ message: 'Group not found' });
   }
 
-  const newChannel = { id: Date.now().toString(), name, group: groupId, users: [] };
-  data.channels.push(newChannel);
+  const newChannel = new Channel({ id: Date.now().toString(), name, groupId, users: [] });
+  await newChannel.save();
   group.channels.push(newChannel.id);
   saveData();
   res.status(201).json(newChannel);
 });
 
 // Add user to channel
-app.post('/api/channels/:channelId/users', (req, res) => {
+app.post('/api/channels/:channelId/users', async (req, res) => {
   const { channelId } = req.params;
   const { userId } = req.body;
 
-  const channel = data.channels.find(channel => channel.id === channelId);
+  const channel = await Channel.findById(channelId);
   const user = data.users.find(user => user.id === userId);
 
   if (!channel || !user) {
@@ -142,7 +157,7 @@ app.post('/api/channels/:channelId/users', (req, res) => {
 
   if (!channel.users.includes(userId)) {
     channel.users.push(userId);
-    saveData();
+    await channel.save();
     res.status(200).json({ message: 'User added to channel' });
   } else {
     res.status(400).json({ message: 'User is already in the channel' });
@@ -155,14 +170,15 @@ app.get('/api/groups', (req, res) => {
 });
 
 // Get all channels
-app.get('/api/channels', (req, res) => {
-  res.json(data.channels);
+app.get('/api/channels', async (req, res) => {
+  const channels = await Channel.find();
+  res.json(channels);
 });
 
 // Middleware for role-based access control
 const checkRole = roles => (req, res, next) => {
   const { userId } = req.body;
-  
+
   const user = data.users.find(user => user.id === userId);
   if (!user) {
     return res.status(404).json({ message: 'User not found' });
