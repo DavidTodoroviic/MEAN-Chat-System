@@ -220,13 +220,17 @@ The Node.js server handles API requests and real-time communication using a comb
 
 Unit tests are executed via Karma. To run the unit tests, use the following command:
 
+```bash
 ng test
+```
 
 ### End-to-End Tests
 
 End-to-end tests are executed via a platform of your choice. To run the end-to-end tests, use the following command:
 
+```bash
 ng e2e
+```
 
 ### Configuration
 
