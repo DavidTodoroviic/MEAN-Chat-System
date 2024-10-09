@@ -222,11 +222,14 @@ Unit tests are executed via Karma. To run the unit tests, use the following comm
 
 ```bash
 ng test
-End-to-End Tests
+
+### End-to-End Tests
+
 End-to-end tests are executed via a platform of your choice. To run the end-to-end tests, use the following command:
 
-bash
-Copy code
+```bash
 ng e2e
-Configuration
+
+### Configuration
+
 The testing configuration is defined in the karma.conf.js file. The configuration includes settings for reporters, coverage, and browsers used for testing.
