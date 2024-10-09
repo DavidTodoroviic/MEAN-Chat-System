@@ -222,6 +222,7 @@ Unit tests are executed via Karma. To run the unit tests, use the following comm
 
 ```bash
 ng test
+bash
 
 ### End-to-End Tests
 
@@ -229,6 +230,7 @@ End-to-end tests are executed via a platform of your choice. To run the end-to-e
 
 ```bash
 ng e2e
+bash
 
 ### Configuration
 
