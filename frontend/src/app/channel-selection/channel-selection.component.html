@@ -1,4 +1,11 @@
 <h2>Select a Channel to Join</h2>
+<div>
+  <h3>Main Channel</h3>
+  <label>
+    <input type="radio" [(ngModel)]="selectedChannelId" [value]="'main'">
+    Main Channel
+  </label>
+</div>
 <div *ngFor="let group of groups">
   <h3>{{ group.name }}</h3>
   <ul>
@@ -11,3 +18,4 @@
   </ul>
 </div>
 <button (click)="joinChannel()">Join Selected Channel</button>
+<button (click)="leaveChannel()">Leave Selected Channel</button>

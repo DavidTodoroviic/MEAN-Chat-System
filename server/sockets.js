@@ -1,6 +1,6 @@
-const socketIO = require('socket.io');
+const socketIO = require('socket.io'); // socket.io is imported
 
-let io;
+let io; // Declare io variable
 
 function init(server) {
   io = socketIO(server);
@@ -12,6 +12,18 @@ function init(server) {
       io.emit('message', message);
     });
 
+    // Handle user joining a channel
+    socket.on('joinChannel', (channelId, userId) => {
+      socket.join(channelId);
+      io.to(channelId).emit('userJoined', { channelId, userId });
+    });
+
+    // Handle user leaving a channel
+    socket.on('leaveChannel', (channelId, userId) => {
+      socket.leave(channelId);
+      io.to(channelId).emit('userLeft', { channelId, userId });
+    });
+
     // When the client disconnects
     socket.on('disconnect', () => {
       console.log('Client disconnected');
@@ -19,4 +31,6 @@ function init(server) {
   });
 }
 
-module.exports = { init };
+module.exports = {
+  init
+};

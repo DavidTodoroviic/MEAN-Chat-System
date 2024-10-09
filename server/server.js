@@ -15,7 +15,7 @@ const MONGO_URI = 'mongodb://localhost:27017/mean-chat'; // Directly set the Mon
 
 // Middleware
 app.use(express.json());
-app.use(cors());  // Enable CORS for all routes
+app.use(cors({ origin: 'http://localhost:4200' }));  // Enable CORS for the frontend origin
 
 // Connect to MongoDB
 mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
