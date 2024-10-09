@@ -51,6 +51,26 @@
         "Group Admin"
       ],
       "groups": "Group 1"
+    },
+    {
+      "id": "1728471125444",
+      "username": "Nayeon",
+      "email": "nay123@gmail.com",
+      "password": "123",
+      "roles": [
+        "User"
+      ],
+      "groups": "Group 1"
+    },
+    {
+      "id": "1728472510965",
+      "username": "Tzuyu",
+      "email": "tzuyu@gmail.com",
+      "password": "123",
+      "roles": [
+        "User"
+      ],
+      "groups": "Group 1"
     }
   ],
   "groups": [],

@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require('multer');
+const path = require('path');
 const fs = require('fs');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -39,6 +41,21 @@ try {
 } catch (err) {
   console.log('No data file found, starting fresh.');
 }
+
+// Multer setup for file uploads
+const upload = multer({ dest: 'uploads/' });
+
+// Endpoint to handle image uploads
+app.post('/upload/chat', upload.single('chatImage'), (req, res) => {
+  if (!req.file) {
+    return res.status(400).send('No file uploaded.');
+  }
+  const filePath = path.join('uploads', req.file.filename);
+  res.send({ filePath });
+});
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Initialise empty data structure
 data.users = data.users || [];
