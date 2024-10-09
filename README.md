@@ -201,3 +201,32 @@ The Node.js server handles API requests and real-time communication using a comb
 1. **Client**: Connects to the server using Socket.io.
 2. **Server**: Listens for events, such as new messages.
 3. **Client**: The chat UI updates in real-time with new messages from other users, ensuring a seamless chat experience.
+
+### Video Chat
+
+- **Client**: Initiates video chat by calling the `startVideoChat` method.
+- **Server**: Facilitates WebRTC signaling for peer-to-peer connection.
+- **Client**: Streams video and audio between peers.
+
+### Image Upload
+
+- **Client**: Selects an image file and sends it to the server via a POST request to `/upload/chat`.
+- **Server**: Handles the file upload and responds with the file path.
+- **Client**: Displays the uploaded image in the chat.
+
+## Testing
+
+### Unit Tests
+
+Unit tests are executed via Karma. To run the unit tests, use the following command:
+
+```bash
+ng test
+End-to-End Tests
+End-to-end tests are executed via a platform of your choice. To run the end-to-end tests, use the following command:
+
+bash
+Copy code
+ng e2e
+Configuration
+The testing configuration is defined in the karma.conf.js file. The configuration includes settings for reporters, coverage, and browsers used for testing.
